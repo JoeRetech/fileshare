@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Send Download Request</title>
+</head>
+<body>
+    <h2>Send Download Request</h2>
+    <p>Would you like to request to download "{{ post.title }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Send Request</button>
+    </form>
+</body>
+</html>

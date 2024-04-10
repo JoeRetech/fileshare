@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Download Requests</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+{% extends "blog/base.html" %}
+{% block content %}
+      
+
+    <div class="container">
+        <h2 class="mt-4 mb-3">Your Requests</h2>
+        <ul class="list-group">
+            {% for request in user_requests %}
+            <li class="list-group-item">
+                <div class="d-flex justify-content-between align-items-center">
+                    <strong>{{ request.post.title }}</strong>
+                    <span class="badge badge-primary">{{ request.get_status_display }}</span>
+                </div>
+                {% if request.status == 'Pending' %}
+                <div class="mt-3">
+                    {% if request.post.author == user %}
+                        <form action="{% url 'approve-request' request.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success mr-2">Accept</button>
+                        </form>
+                        <form action="{% url 'decline-request' request.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Decline</button>
+                        </form>
+                    {% else %}
+                        <span class="btn btn-outline-danger">Waiting for Approval</span>
+                    {% endif %}
+                </div>
+                {% elif request.status == 'Approved' %}
+                <div class="mt-3">
+                    <a href="{{ request.post.file.url }}" download class="btn btn-primary">Download</a>
+                </div>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock  %}
+    <!-- Bootstrap JS and jQuery (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
